@@ -1,0 +1,22 @@
+{
+  "question": "Що цей код виведе в консоль?",
+  "code": "console.log(typeof null);",
+  "options": [
+    {
+      "value": " null",
+      "correct": false
+    },
+    {
+      "value": "object",
+      "correct": true
+    },
+    {
+      "value": "undefined",
+      "correct": false
+    },
+    {
+      "value": "NaN",
+      "correct": false
+    }
+  ]
+}

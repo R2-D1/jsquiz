@@ -1,0 +1,22 @@
+{
+  "question": "Що цей код виведе в консоль?",
+  "code": "console.log(0.1 + 0.2 === 0.3);",
+  "options": [
+    {
+      "value": "SyntaxError",
+      "correct": false
+    },
+    {
+      "value": "true",
+      "correct": false
+    },
+    {
+      "value": "false",
+      "correct": true
+    },
+    {
+      "value": "undefined",
+      "correct": false
+    }
+  ]
+}

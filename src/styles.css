@@ -1,0 +1,47 @@
+:root {
+  --primary-color: #01ef92;
+  --accent-color: #fff;
+  --error-color: red;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+*, ::before, ::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #000;
+  color: var(--accent-color);
+}
+
+.main {
+  display: flex;
+  min-height: 100vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  width: 100%;
+  flex: 1;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 40px;
+  border-width: 30px;
+}
+
+.container.border {
+  border-width: 30px;
+}
+
+.button {
+  border: 2px solid var(--primary-color);
+  padding: 10px 20px;
+  background: none;
+  color: var(--accent-color);
+}

@@ -1,0 +1,22 @@
+{
+  "question": "В якому порядку числа будуть виведені в консоль?",
+  "code": "(function(){\n  console.log(1); \n  setTimeout(function(){console.log(2)}, 1000); \n  setTimeout(function(){console.log(3)}, 0); \n  console.log(4);\n})();\n",
+  "options": [
+    {
+      "value": "1, 2, 3, 4",
+      "correct": false
+    },
+    {
+      "value": "1, 4, 2, 3",
+      "correct": false
+    },
+    {
+      "value": "1, 3, 4, 2",
+      "correct": false
+    },
+    {
+      "value": "1, 4, 3, 2",
+      "correct": true
+    }
+  ]
+}
