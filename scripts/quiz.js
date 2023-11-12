@@ -22,6 +22,10 @@ export class Quiz {
     quizProgressElementRef = document.querySelector('.quiz__progress');
     quizFinishLengthElementRef = document.querySelector('.quiz__finish-length');
     quizProgressBarElementRef = document.querySelector('.quiz__progress-bar');
+    quizInfoButtonElementRef = document.querySelector('.quiz__info-button');
+    quizInfoElementRef = document.querySelector('.quiz__info');
+    quizInfoTextElementRef = document.querySelector('.quiz__info-text');
+    quizInfoCloseElementRef = document.querySelector('.quiz__info-close');
 
     init() {
         const localQuizNumber = localStorage.getItem('currentQuizNumber');
@@ -29,10 +33,15 @@ export class Quiz {
         const storedOptionRow = localStorage.getItem('selectedOption');
         const storedScore = localStorage.getItem('score');
         this.nextQuizButtonElementRef.disabled = true;
+        this.quizInfoButtonElementRef.disabled = true;
 
         this.nextQuizButtonElementRef.addEventListener('click', this.nextQuiz.bind(this));
         this.quizFinishButtonElementRef.addEventListener('click', this.finishQuiz.bind(this));
         this.quizStartButtonElementRef.addEventListener('click', this.startAgain.bind(this));
+        this.quizInfoButtonElementRef.addEventListener('click', this.showInfo.bind(this));
+        this.quizInfoCloseElementRef.addEventListener('click', () => {
+            this.quizInfoElementRef.classList.remove('quiz__info_visible');
+        });
 
         if (storedScore) {
             this.score = +storedScore;
@@ -95,6 +104,7 @@ export class Quiz {
 
         if (this.selectedOption) {
             this.nextQuizButtonElementRef.disabled = false;
+            this.quizInfoButtonElementRef.disabled = false;
             const storedOptionIndex = this.quiz.options.findIndex(option => option.value === this.selectedOption.value);
             const storedOptionButton = this.buttons[storedOptionIndex];
             
@@ -121,6 +131,7 @@ export class Quiz {
         localStorage.setItem('selectedOption', JSON.stringify(option));
         this.disableButtons();
         this.nextQuizButtonElementRef.disabled = false;
+        this.quizInfoButtonElementRef.disabled = false;
 
         if (this.currentQuizNumber === this.quizzesLength) {
             this.quizFinishButtonElementRef.disabled = false;
@@ -136,12 +147,8 @@ export class Quiz {
     }
 
     showCorrectAnswer() {
-        console.log('showCorrectAnswer');
         const correctAnswerIndex = this.quiz.options.findIndex(option => option.correct);
-        console.log(this.buttons);
         const correctAnswerButton = this.buttons[correctAnswerIndex];
-        console.log(correctAnswerButton);
-        console.log(correctAnswerIndex);
         correctAnswerButton.classList.add('quiz__option_correct');
     }
 
@@ -163,6 +170,7 @@ export class Quiz {
         this.cleanSelectedOption();
         this.loadQuiz();
         this.nextQuizButtonElementRef.disabled = true;
+        this.quizInfoButtonElementRef.disabled = true;
         
         if (this.currentQuizNumber === this.quizzesLength) {
             this.showFinishButton();
@@ -195,11 +203,11 @@ export class Quiz {
     }
 
     finishQuiz() {
-        console.log('finishQuiz');
         this.quizStartButtonElementRef.classList.add('quiz__start_visible');
         this.nextQuizButtonElementRef.classList.remove('quiz__next_visible');
         this.quizProgressElementRef.classList.remove('quiz__progress_visible');
         this.quizFinishButtonElementRef.classList.remove('quiz__finish_visible');
+        this.quizInfoButtonElementRef.classList.remove('quiz__info-button_visible');
         const scorePercent = this.score / this.quizzesLength * 100 + '%';
         document.documentElement.style.setProperty('--score-percent',scorePercent);
         this.quizProgressBarElementRef.innerText = scorePercent;
@@ -217,6 +225,9 @@ export class Quiz {
         localStorage.removeItem('score');
         this.quizResultElementRef.classList.remove('quiz__result_visible');
         this.nextQuizButtonElementRef.classList.add('quiz__next_visible');
+        this.nextQuizButtonElementRef.disabled = true;
+        this.quizInfoButtonElementRef.classList.add('quiz__info-button_visible');
+        this.quizInfoButtonElementRef.disabled = true;
         this.quizBodyElementRef.classList.add('quiz__body_visible');
         this.quizStartButtonElementRef.classList.remove('quiz__start_visible');
         this.quizProgressElementRef.classList.add('quiz__progress_visible');
@@ -225,5 +236,10 @@ export class Quiz {
         this.score = 0;
         this.scoreElementRef.innerText = this.score;
         this.loadQuiz();
+    }
+
+    showInfo() {
+        this.quizInfoTextElementRef.innerHTML = this.quiz.info;
+        this.quizInfoElementRef.classList.add('quiz__info_visible');
     }
 }
