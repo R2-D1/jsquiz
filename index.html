@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>JSQUIZ</title>
+  <link rel="stylesheet" href="./styles/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/themes/prism-funky.min.css" integrity="sha512-KaCkQvJ0dQIhdJ0Am5LM3sgXA+Y0LWpbxkfKACZnlOqDvk54lZaWYk/sQiJGNRuSyFpe24jpjwJ4q+u3Rbez5g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/prism.min.js" defer></script>
+  <script src="./scripts/main.js" type="module" defer></script>
+</head>
+<body>
+  <main class="main">
+    <div class="container border">
+  <div class="quiz">
+      <div class="quiz__header">
+        <div class="quiz__logo">
+          JSQUIZ
+        </div>
+          <div class="quiz__progress quiz__progress_visible">
+           <span class="quiz__current"></span>
+           /
+           <span class="quiz__length"></span>
+          </div>
+        <div class="quiz__navigation">
+          <button class="quiz__next quiz__next_visible button"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="18" fill="none"><path fill="#fff" d="m3 18 9-9-9-9-3 3 6 6-6 6 3 3Z"/></svg></button>
+          <button class="quiz__finish button">Завершити</button>
+          <button class="quiz__start button">Почати спочатку</button>
+        </div>
+      </div>
+      <div class="quiz__result">
+        <h1 class="quiz__result-title border">Результат</h1>
+        <div class="quiz__score-container">
+          <div class="quiz__progress-bar"></div>
+          <div class="quiz__score__counter">
+            <span class="quiz__score"></span> 
+            /
+            <span class="quiz__finish-length"></span>
+          </div>
+        </div>
+      </div>
+      <div class="quiz__body quiz__body_visible">
+        <h1 class="quiz__title border"></h1>
+        <div class="quiz__code-container">
+          <pre><code class="quiz__code language-javascript"></code></pre>
+        </div>
+        <div class="quiz__options"></div>
+      </div>
+    </div>
+  </div>
+  </main>
+</body>
+</html>
