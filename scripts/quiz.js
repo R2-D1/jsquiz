@@ -1,13 +1,12 @@
 export class Quiz {
     currentQuizNumber;
-    quizzesLength = 4;
-    quiz;
-    isQuizFinished = false;
+    quizzesLength;
+    questions;
     score = 0;
     buttons = [];
     isQuizFinished = false;
     selectedOption = null;
-    
+
     questionElementRef = document.querySelector('.quiz__title');
     optionsContainerElementRef = document.querySelector('.quiz__options');
     nextQuizButtonElementRef = document.querySelector('.quiz__next');
@@ -32,10 +31,11 @@ export class Quiz {
         const localIsQuizFinished = localStorage.getItem('isQuizFinished');
         const storedOptionRow = localStorage.getItem('selectedOption');
         const storedScore = localStorage.getItem('score');
+        const storedQuizLength = localStorage.getItem('quizzesLength');
         this.nextQuizButtonElementRef.disabled = true;
         this.quizInfoButtonElementRef.disabled = true;
 
-        this.nextQuizButtonElementRef.addEventListener('click', this.nextQuiz.bind(this));
+        this.nextQuizButtonElementRef.addEventListener('click', this.nextQuestion.bind(this));
         this.quizFinishButtonElementRef.addEventListener('click', this.finishQuiz.bind(this));
         this.quizStartButtonElementRef.addEventListener('click', this.startAgain.bind(this));
         this.quizInfoButtonElementRef.addEventListener('click', this.showInfo.bind(this));
@@ -43,17 +43,23 @@ export class Quiz {
             this.quizInfoElementRef.classList.remove('quiz__info_visible');
         });
 
+        if (storedQuizLength) {
+            this.quizzesLength = +storedQuizLength;
+        }
+
+
         if (storedScore) {
             this.score = +storedScore;
             this.scoreElementRef.innerText = this.score;
         }
-        
+
         if (localIsQuizFinished) {
             this.isQuizFinished = localIsQuizFinished === 'true';
+        
 
             if (this.isQuizFinished) {
                 this.finishQuiz();
-                return;
+
             }
         }
 
@@ -64,6 +70,8 @@ export class Quiz {
 
         if (localQuizNumber) {
             this.currentQuizNumber = +localQuizNumber;
+            console.log(this.quizzesLength);
+            
             if (this.currentQuizNumber === this.quizzesLength) {
                 this.showFinishButton();
             }
@@ -71,23 +79,31 @@ export class Quiz {
             this.currentQuizNumber = 1;
             localStorage.setItem('currentQuizNumber', this.currentQuizNumber.toString());
         }
-      
-        this.loadQuiz();
+
+        this.loadQuestions();
     }
 
-    loadQuiz() {
-        fetch(`./quizzes/${this.currentQuizNumber}.json`)
+    loadQuestions() {
+        console.log('loadQuestions');
+        
+        fetch(`./questions.json`)
             .then(response => response.json())
             .then(data => {
-                this.quiz = data;
-                this.drowQuiz();
+                this.questions = data;                
+                this.quizzesLength = data.length;
+                localStorage.setItem('quizzesLength', this.quizzesLength.toString());
+                this.drowQuestion();
             })
             .catch(error => {
                 console.error('Error fetching the JSON file:', error);
             });
     }
 
-    drowQuiz() {
+    drowQuestion() {
+        const quizIndex = this.currentQuizNumber - 1;
+        
+        const quiz = this.questions[quizIndex];
+        this.quiz = quiz;
         this.questionElementRef.innerText = this.quiz.question;
         this.currentQuizNumberElementRef.innerText = this.currentQuizNumber;
         this.quizLengthElementRef.innerText = this.quizzesLength;
@@ -107,8 +123,8 @@ export class Quiz {
             this.quizInfoButtonElementRef.disabled = false;
             const storedOptionIndex = this.quiz.options.findIndex(option => option.value === this.selectedOption.value);
             const storedOptionButton = this.buttons[storedOptionIndex];
-            
-            if (this.selectOption.correct) {
+
+            if (this.selectedOption.correct) {
                 storedOptionButton.classList.add('quiz__option_correct');
             } else {
                 storedOptionButton.classList.add('quiz__option_incorrect');
@@ -154,24 +170,24 @@ export class Quiz {
 
     increaseScore() {
         const score = localStorage.getItem('score');
-        
+
         if (null !== score) {
           this.score = +score + 1;
         } else {
           this.score = 1;
         }
-    
+
         localStorage.setItem('score', this.score.toString());
     }
 
-    nextQuiz() {
+    nextQuestion() {
         this.currentQuizNumber++;
         localStorage.setItem('currentQuizNumber', this.currentQuizNumber.toString());
         this.cleanSelectedOption();
-        this.loadQuiz();
         this.nextQuizButtonElementRef.disabled = true;
         this.quizInfoButtonElementRef.disabled = true;
-        
+        this.drowQuestion();
+
         if (this.currentQuizNumber === this.quizzesLength) {
             this.showFinishButton();
         }
@@ -202,19 +218,26 @@ export class Quiz {
         }
     }
 
-    finishQuiz() {
+    finishQuiz() {                
         this.quizStartButtonElementRef.classList.add('quiz__start_visible');
         this.nextQuizButtonElementRef.classList.remove('quiz__next_visible');
         this.quizProgressElementRef.classList.remove('quiz__progress_visible');
         this.quizFinishButtonElementRef.classList.remove('quiz__finish_visible');
         this.quizInfoButtonElementRef.classList.remove('quiz__info-button_visible');
-        const scorePercent = this.score / this.quizzesLength * 100 + '%';
-        document.documentElement.style.setProperty('--score-percent',scorePercent);
+        if (!this.quizzesLength) {
+            const localQuizzesLength = localStorage.getItem('quizzesLength');
+            if (localQuizzesLength) {}
+            this.quizzesLength = +localQuizzesLength;
+        }
+        const scorePercent = Number((this.score / this.quizzesLength * 100).toFixed(2)) + '%';
+        localStorage.setItem('scorePercent', scorePercent.toString());
+        document.documentElement.style.setProperty('--score-percent', scorePercent);
         this.quizProgressBarElementRef.innerText = scorePercent;
         this.quizFinishLengthElementRef.innerText = this.quizzesLength;
         this.cleanSelectedOption();
         localStorage.setItem('isQuizFinished', 'true');
         localStorage.removeItem('currentQuizNumber');
+        this.optionsContainerElementRef.innerHTML = '';
         this.quizBodyElementRef.classList.remove('quiz__body_visible');
         this.scoreElementRef.innerText = this.score;
         this.quizResultElementRef.classList.add('quiz__result_visible');
@@ -234,8 +257,7 @@ export class Quiz {
         this.currentQuizNumber = 1;
         localStorage.setItem('currentQuizNumber', this.currentQuizNumber.toString());
         this.score = 0;
-        this.scoreElementRef.innerText = this.score;
-        this.loadQuiz();
+        this.drowQuestion();
     }
 
     showInfo() {

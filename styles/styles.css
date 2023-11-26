@@ -96,7 +96,7 @@
   display: flex;
   justify-content: space-between;
   font-size: 25px;
-  padding: 15px 20px 15px 80px;
+  padding: 15px 30px;
   border: 2px solid var(--primary-color);
 }
 
@@ -123,12 +123,25 @@
 }
 
 .quiz__code-container {
-  padding: 30px 20px;
+  margin: 30px 0;
+  background-color: #fff;
+}
+
+pre.quiz__code__wrapper[class*="language-"] {
+  padding: 30px 35px;
+  background-color: none;
+}
+
+.quiz__code {
+  display: block;
+  padding: 10px;
 }
 
 .quiz__title, .quiz__result-title  {
-  padding: 20px;
+  padding: 20px 30px;
   font-size: 25px;
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
 }
 
 .quiz__logo {
