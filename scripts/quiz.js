@@ -92,7 +92,9 @@ export class Quiz {
                 this.questions = data;                
                 this.quizzesLength = data.length;
                 localStorage.setItem('quizzesLength', this.quizzesLength.toString());
-                this.drowQuestion();
+                if (!this.isQuizFinished) {
+                    this.drowQuestion();
+                }
             })
             .catch(error => {
                 console.error('Error fetching the JSON file:', error);
@@ -100,6 +102,8 @@ export class Quiz {
     }
 
     drowQuestion() {
+        console.log('drowQuestion');
+        
         const quizIndex = this.currentQuizNumber - 1;
         
         const quiz = this.questions[quizIndex];
@@ -109,7 +113,6 @@ export class Quiz {
         this.quizLengthElementRef.innerText = this.quizzesLength;
         this.quizCodeElementRef.innerHTML = this.quiz.code;
         Prism.highlightElement(this.quizCodeElementRef);
-
 
         this.quiz.options.forEach(option => {
             const button = this.createButton(option);
@@ -121,10 +124,10 @@ export class Quiz {
         if (this.selectedOption) {
             this.nextQuizButtonElementRef.disabled = false;
             this.quizInfoButtonElementRef.disabled = false;
-            const storedOptionIndex = this.quiz.options.findIndex(option => option.value === this.selectedOption.value);
+            const storedOptionIndex = this.quiz.options.findIndex(option => option === this.selectedOption);
             const storedOptionButton = this.buttons[storedOptionIndex];
 
-            if (this.selectedOption.correct) {
+            if (this.selectedOption === this.quiz.answer) {
                 storedOptionButton.classList.add('quiz__option_correct');
             } else {
                 storedOptionButton.classList.add('quiz__option_incorrect');
@@ -138,7 +141,7 @@ export class Quiz {
     createButton(option) {
         const button = document.createElement('button');
         button.classList.add('quiz__option');
-        button.innerText = option.value;
+        button.innerText = option;
         return button;
     }
 
@@ -153,7 +156,7 @@ export class Quiz {
             this.quizFinishButtonElementRef.disabled = false;
         }
 
-        if (option.correct) {
+        if (option === this.quiz.answer) {
             this.increaseScore();
             button.classList.add('quiz__option_correct');
         } else {
@@ -163,7 +166,7 @@ export class Quiz {
     }
 
     showCorrectAnswer() {
-        const correctAnswerIndex = this.quiz.options.findIndex(option => option.correct);
+        const correctAnswerIndex = this.quiz.options.findIndex(option => option === this.quiz.answer);
         const correctAnswerButton = this.buttons[correctAnswerIndex];
         correctAnswerButton.classList.add('quiz__option_correct');
     }
@@ -219,6 +222,8 @@ export class Quiz {
     }
 
     finishQuiz() {                
+        console.log('finishQuiz');
+        
         this.quizStartButtonElementRef.classList.add('quiz__start_visible');
         this.nextQuizButtonElementRef.classList.remove('quiz__next_visible');
         this.quizProgressElementRef.classList.remove('quiz__progress_visible');
@@ -237,13 +242,13 @@ export class Quiz {
         this.cleanSelectedOption();
         localStorage.setItem('isQuizFinished', 'true');
         localStorage.removeItem('currentQuizNumber');
-        this.optionsContainerElementRef.innerHTML = '';
         this.quizBodyElementRef.classList.remove('quiz__body_visible');
         this.scoreElementRef.innerText = this.score;
         this.quizResultElementRef.classList.add('quiz__result_visible');
     }
 
     startAgain() {
+        console.log('startAgain');
         localStorage.removeItem('isQuizFinished');
         localStorage.removeItem('score');
         this.quizResultElementRef.classList.remove('quiz__result_visible');
