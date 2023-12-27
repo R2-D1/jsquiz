@@ -55,7 +55,7 @@ export class Quiz {
 
         if (localIsQuizFinished) {
             this.isQuizFinished = localIsQuizFinished === 'true';
-        
+
 
             if (this.isQuizFinished) {
                 this.finishQuiz();
@@ -71,7 +71,7 @@ export class Quiz {
         if (localQuizNumber) {
             this.currentQuizNumber = +localQuizNumber;
             console.log(this.quizzesLength);
-            
+
             if (this.currentQuizNumber === this.quizzesLength) {
                 this.showFinishButton();
             }
@@ -85,11 +85,11 @@ export class Quiz {
 
     loadQuestions() {
         console.log('loadQuestions');
-        
+
         fetch(`./questions.json`)
             .then(response => response.json())
             .then(data => {
-                this.questions = data;                
+                this.questions = data;
                 this.quizzesLength = data.length;
                 localStorage.setItem('quizzesLength', this.quizzesLength.toString());
                 if (!this.isQuizFinished) {
@@ -103,9 +103,9 @@ export class Quiz {
 
     drowQuestion() {
         console.log('drowQuestion');
-        
+
         const quizIndex = this.currentQuizNumber - 1;
-        
+
         const quiz = this.questions[quizIndex];
         this.quiz = quiz;
         this.questionElementRef.innerText = this.quiz.question;
@@ -221,9 +221,9 @@ export class Quiz {
         }
     }
 
-    finishQuiz() {                
+    finishQuiz() {
         console.log('finishQuiz');
-        
+
         this.quizStartButtonElementRef.classList.add('quiz__start_visible');
         this.nextQuizButtonElementRef.classList.remove('quiz__next_visible');
         this.quizProgressElementRef.classList.remove('quiz__progress_visible');
