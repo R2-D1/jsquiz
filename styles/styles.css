@@ -1,7 +1,7 @@
 :root {
     --primary-color: #e4ebf5;
-    --accent-color: #20ff00;
-    --error-color: red;
+    --accent-color: #adff2f;
+    --error-color: #fe3725;
     --score-percent: 0;
     --secondary-color: #000;
     --code-background-color: #222;
@@ -22,8 +22,13 @@ body {
     color: var(--primary-color);
 }
 
-button {
-    cursor: pointer;
+@font-face {
+    font-family: 'AKONY';
+    src: url('../public/fonts/AKONY.otf') format('opentype'),
+    url('../public/fonts/AKONY.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
 }
 
 .main {
@@ -49,9 +54,9 @@ button {
 }
 
 .button {
-    padding: 15px;
+    padding: 10px 20px;
     min-width: 100px;
-    border: 2px solid var(--primary-color);
+    border: 4px solid var(--primary-color);
     background-color: transparent;
     cursor: pointer;
     color: var(--primary-color);
@@ -87,7 +92,7 @@ button {
 .quiz__body {
     display: none;
     grid-template-columns: 1fr 320px;
-    gap: 30px;
+    gap: 20px;
 }
 
 .quiz__body_visible {
@@ -108,7 +113,7 @@ button {
     justify-content: space-between;
     font-size: 25px;
     padding: 10px 30px;
-    border: 2px solid var(--primary-color);
+    border: 4px solid var(--primary-color);
     border-radius: 40px;
 }
 
@@ -169,33 +174,44 @@ code[class*="language-"] {
     border-radius: 40px;
 }
 
-.quiz__logo {
-    font-size: 15px;
-    font-weight: bold;
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -65px;
-    text-align: center;
-    color: var(--secondary-color);
+.quiz__result-title {
+    margin-bottom: 20px;
 }
 
-.quiz__navigation {
+.quiz__logo {
+    position: absolute;
+    left: 15px;
+    bottom: calc(100% + 40px);
+    padding: 10px 20px 5px;
+    color: var(--secondary-color);
+    font-family: AKONY, sans-serif;
+    background-color: #adff2e;
+    border-radius: 20px 20px 0 0;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.quiz__control {
     display: flex;
     align-items: center;
+    gap: 10px;
 }
 
 .quiz__progress {
     display: none;
-    font-size: 30px;
-    padding: 10px 40px;
+    font-size: 23px;
+    min-width: 200px;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 20px 5px;
     color: var(--secondary-color);
     background-color: var(--primary-color);
     border-radius: 40px;
+    font-family: AKONY, sans-serif;
 }
 
 .quiz__progress_visible {
-    display: block;
+    display: flex;
 }
 
 .quiz__options-container {
@@ -239,15 +255,15 @@ code[class*="language-"] {
 }
 
 .quiz__score-counter {
-    font-weight: bold;
+    font-family: AKONY, sans-serif;
 }
 
 .quiz__progress-bar {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 400px;
-    height: 400px;
+    width: 300px;
+    height: 300px;
     margin: 0 auto;
     border-radius: 50%;
     font-size: 30px;
@@ -257,7 +273,6 @@ code[class*="language-"] {
 
 .quiz__info-button {
     display: none;
-    margin-right: 5px;
 }
 
 .quiz__info-button_visible {
